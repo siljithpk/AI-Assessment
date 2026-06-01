@@ -33,6 +33,11 @@
             color: white;
             border-bottom: 4px solid #D50032;
         }
+        .expert-header {
+            background-color: #D50032;
+            color: white;
+            border-bottom: 4px solid #002B49;
+        }
     </style>
 </head>
 <body class="bg-uniting-light text-gray-800">
@@ -44,7 +49,7 @@
             </div>
             <div class="text-right border-l-2 border-gray-200 pl-4">
                 <h2 class="text-xl font-bold text-uniting-navy">AI Assessment</h2>
-                <p class="text-sm font-semibold text-uniting-red">60 Questions</p>
+                <p class="text-sm font-semibold text-uniting-red">40 Architecture & Strategy Questions</p>
             </div>
         </div>
     </header>
@@ -53,15 +58,15 @@
         
         <div id="intro" class="bg-white rounded-lg shadow-sm p-8 mb-8 border-l-8 border-uniting-red">
             <h2 class="text-2xl font-bold text-uniting-navy mb-4">Welcome to the Uniting AI Assessment</h2>
-            <p class="text-gray-600 mb-4">This 60-question assessment is designed to establish your baseline understanding of Artificial Intelligence, LLMs, RAG architectures, Azure AI, and AI Governance.</p>
-            <p class="text-gray-600">Select the best answer for each question. Once completed, your profile and recommended learning paths will be generated.</p>
+            <p class="text-gray-600 mb-4">This 40-question technical diagnostic evaluates your deep architectural understanding of Retrieval-Augmented Generation (RAG), AI Agent systems, cloud infrastructure orchestration, model engineering, and enterprise governance frameworks.</p>
+            <p class="text-gray-600">Select the single best answer for each scenario. Upon submission, an advanced competency profile and target development path will be automatically calculated.</p>
         </div>
 
         <form id="assessmentForm" class="space-y-12">
             <div id="questionsContainer"></div>
 
             <div class="bg-white p-6 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between sticky bottom-4 border-2 border-uniting-navy">
-                <div class="text-sm text-uniting-navy font-semibold mb-4 sm:mb-0">Ensure all 60 questions are answered before submitting.</div>
+                <div class="text-sm text-uniting-navy font-semibold mb-4 sm:mb-0">Ensure all 40 questions are completed before processing results.</div>
                 <button type="submit" class="bg-uniting-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 shadow-md transform hover:-translate-y-1">
                     Submit Assessment
                 </button>
@@ -70,25 +75,34 @@
 
         <div id="resultsSection" class="hidden bg-white rounded-lg shadow-lg p-8 mt-8 border-t-8 border-uniting-navy mb-16">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-uniting-navy mb-2">Assessment Complete</h2>
-                <div class="text-6xl font-extrabold text-uniting-red mb-6" id="scoreDisplay">0 / 60</div>
-                <div class="inline-block px-6 py-3 rounded-full text-xl font-bold text-white bg-uniting-navy shadow-md" id="profileBadge">Profile</div>
+                <h2 class="text-3xl font-bold text-uniting-navy mb-2">Assessment Matrix Complete</h2>
+                <div class="text-6xl font-extrabold text-uniting-red mb-6" id="scoreDisplay">0 / 40</div>
+                <div class="inline-block px-6 py-3 rounded-full text-xl font-bold text-white bg-uniting-navy shadow-md" id="profileBadge">Evaluating...</div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
                 <div class="bg-uniting-light p-6 rounded-lg border-l-4 border-uniting-navy shadow-sm">
-                    <h3 class="text-xl font-bold text-uniting-navy mb-3 pb-2 border-b border-gray-300">Profile Description</h3>
+                    <h3 class="text-xl font-bold text-uniting-navy mb-3 pb-2 border-b border-gray-300">Competency Profile</h3>
                     <p id="profileDescription" class="text-gray-700 leading-relaxed font-medium"></p>
                 </div>
                 <div class="bg-uniting-light p-6 rounded-lg border-l-4 border-uniting-red shadow-sm">
-                    <h3 class="text-xl font-bold text-uniting-navy mb-3 pb-2 border-b border-gray-300">Recommended Learning</h3>
-                    <ul id="recommendedLearning" class="list-disc pl-5 text-gray-700 space-y-2 font-medium"></ul>
+                    <h3 class="text-xl font-bold text-uniting-navy mb-3 pb-2 border-b border-gray-300">Team Benchmarks & Context</h3>
+                    <div id="teamBenchmarks" class="text-sm text-gray-700 space-y-2 font-medium">
+                        <p class="font-bold text-uniting-navy mb-2">Where this score sits within an Enterprise Architecture environment:</p>
+                        <ul class="list-disc pl-5 space-y-1 text-xs">
+                            <li><span class="font-semibold">Most Architects:</span> 20–30 Correct</li>
+                            <li><span class="font-semibold">Strong Architects:</span> 30–35 Correct</li>
+                            <li><span class="font-semibold">AI-Focused Architects:</span> 35–38 Correct</li>
+                            <li><span class="font-semibold">Chief Architect leading AI Strategy:</span> 36–39 Correct</li>
+                        </ul>
+                        <p class="text-xs italic mt-3 text-gray-500">Note: Scoring 38-40 indicates significant domain specialization across agent systems, token attention dynamics, evaluation protocols, and probabilistic alignment constraints.</p>
+                    </div>
                 </div>
             </div>
             
             <div class="mt-10 text-center">
                 <button type="button" onclick="location.reload()" class="text-uniting-navy hover:text-uniting-red font-bold transition duration-200 border-b-2 border-transparent hover:border-uniting-red pb-1">
-                    ← Retake Assessment
+                    ← Reset & Retake Assessment
                 </button>
             </div>
         </div>
@@ -96,130 +110,86 @@
     </main>
 
     <script>
-        // Full Assessment Data
+        // Formatted 40-Question Matrix
         const assessmentData = [
             {
-                section: "Section 1 – AI Fundamentals",
+                section: "Core Enterprise AI & Architectural Foundations",
+                isExpert: false,
                 questions: [
-                    { id: 1, q: "What is Artificial Intelligence (AI)?", options: ["A programming language", "Systems that perform tasks requiring human intelligence", "A database technology", "A networking protocol"], answer: 1 },
-                    { id: 2, q: "Which is an example of Generative AI?", options: ["Firewall", "GPT generating text", "DNS server", "Data warehouse"], answer: 1 },
-                    { id: 3, q: "What is Machine Learning?", options: ["A subset of AI that learns from data", "A cloud service", "A database engine", "A networking model"], answer: 0 },
-                    { id: 4, q: "What is Deep Learning?", options: ["Spreadsheet automation", "Rule-based programming", "Neural-network-based machine learning", "API security"], answer: 2 },
-                    { id: 5, q: "Which statement best describes an LLM?", options: ["Large Language Model", "Local Logic Module", "Linked Learning Mechanism", "Language Lookup Method"], answer: 0 },
-                    { id: 6, q: "LLMs primarily predict:", options: ["Database records", "Network packets", "Next tokens in a sequence", "User passwords"], answer: 2 },
-                    { id: 7, q: "What is a token?", options: ["API key", "Unit of text processed by an LLM", "User account", "Security certificate"], answer: 1 },
-                    { id: 8, q: "What is training data?", options: ["Data used to teach a model patterns", "Backup data", "Audit logs", "Metadata"], answer: 0 },
-                    { id: 9, q: "What is inference?", options: ["Model generating responses", "Model training", "Data backup", "Authentication"], answer: 0 },
-                    { id: 10, q: "Which is NOT an AI use case?", options: ["Image generation", "Text summarization", "Predictive analytics", "Replacing electricity"], answer: 3 }
+                    { id: 1, q: "A RAG system primarily exists to:", options: ["Reduce network latency", "Ground model responses using enterprise knowledge", "Increase GPU utilization", "Replace APIs"], answer: 1 },
+                    { id: 2, q: "Which Azure service is most commonly used as a retrieval layer in enterprise RAG?", options: ["Azure DNS", "Azure AI Search", "Azure Firewall", "Azure Bastion"], answer: 1 },
+                    { id: 3, q: "The primary purpose of embeddings is:", options: ["Encryption", "Semantic representation of information", "Authentication", "Compression"], answer: 1 },
+                    { id: 4, q: "What is the biggest weakness of standalone LLMs?", options: ["Storage", "Hallucination", "Networking", "Cost allocation"], answer: 1 },
+                    { id: 5, q: "What differentiates an AI Agent from a chatbot?", options: ["UI", "Tool execution capability", "Storage account", "Search index"], answer: 1 },
+                    { id: 6, q: "What is grounding?", options: ["Providing relevant context before generation", "Encryption", "Caching", "Authentication"], answer: 0 },
+                    { id: 7, q: "Which Azure service secures secrets?", options: ["Key Vault", "Sentinel", "APIM", "Monitor"], answer: 0 },
+                    { id: 8, q: "What is MCP?", options: ["Model Context Protocol", "Multi Cloud Platform", "Model Control Process", "Multi Compute Provider"], answer: 0 },
+                    { id: 9, q: "Why use APIM in AI solutions?", options: ["Governance and API mediation", "Storage", "Search", "Training"], answer: 0 },
+                    { id: 10, q: "Which is most important for healthcare AI?", options: ["Lowest latency", "Human oversight", "Maximum autonomy", "Public access"], answer: 1 },
+                    { id: 11, q: "Which pattern best supports enterprise knowledge assistants?", options: ["RAG", "FTP", "ETL", "Batch Processing"], answer: 0 },
+                    { id: 12, q: "What is vector similarity search?", options: ["Searching by meaning", "Searching by filename", "SQL joins", "Encryption"], answer: 0 },
+                    { id: 13, q: "What is prompt injection?", options: ["Attempt to manipulate model instructions", "GPU failure", "Authentication failure", "Network attack"], answer: 0 },
+                    { id: 14, q: "What is the purpose of AI evaluation?", options: ["Measure quality and risk", "Reduce storage", "Manage users", "Deploy code"], answer: 0 },
+                    { id: 15, q: "Which Microsoft platform is intended for business-agent development?", options: ["Copilot Studio", "Visual Studio", "Defender", "Sentinel"], answer: 0 },
+                    { id: 16, q: "A RAG system returns highly relevant chunks but poor answers. Most likely cause?", options: ["Retrieval issue", "Generation issue", "Storage issue", "DNS issue"], answer: 1 },
+                    { id: 17, q: "Increasing chunk size from 500 to 5000 tokens usually causes:", options: ["Better precision", "Lower semantic accuracy", "Better security", "Faster indexing"], answer: 1 },
+                    { id: 18, q: "A multi-agent architecture repeatedly loops between Planner and Research agents. Root cause?", options: ["Missing orchestration constraints", "Missing DNS", "Missing subnet", "Missing APIM"], answer: 0 },
+                    { id: 19, q: "Why should agent actions be mediated through APIs?", options: ["Governance and auditability", "Lower latency", "Better prompting", "More tokens"], answer: 0 },
+                    { id: 20, q: "Which metric is most useful when evaluating enterprise RAG?", options: ["CPU utilization", "Grounded answer accuracy", "Storage size", "Network hops"], answer: 1 },
+                    { id: 21, q: "When should fine-tuning be preferred over RAG?", options: ["Frequently changing knowledge", "Domain behaviour adaptation", "SharePoint search", "Document retrieval"], answer: 1 },
+                    { id: 22, q: "A model achieves 95% benchmark accuracy but fails production. Most likely reason?", options: ["Evaluation dataset mismatch", "Azure outage", "DNS latency", "APIM throttling"], answer: 0 },
+                    { id: 23, q: "What is the primary architectural purpose of an Agent Gateway?", options: ["Centralized policy enforcement", "Faster storage", "More embeddings", "More prompts"], answer: 0 },
+                    { id: 24, q: "What is the biggest risk of giving an agent unrestricted tool access?", options: ["Hallucination", "Privilege escalation", "Cost", "Latency"], answer: 1 },
+                    { id: 25, q: "Which design best supports clinician-in-the-loop governance?", options: ["Autonomous updates", "Human approval workflow", "Agent autonomy", "Batch processing"], answer: 1 },
+                    { id: 26, q: "What is the principal challenge of long-context LLMs versus RAG?", options: ["Token attention dilution", "Storage", "Authentication", "Networking"], answer: 0 },
+                    { id: 27, q: "Why do transformer attention costs grow rapidly?", options: ["Quadratic attention complexity", "DNS growth", "Embedding growth", "GPU storage"], answer: 0 },
+                    { id: 28, q: "What is the most effective defense against prompt injection?", options: ["Bigger models", "Layered controls and tool authorization", "More tokens", "More embeddings"], answer: 1 },
+                    { id: 29, q: "Which architecture best supports AI observability?", options: ["Prompt logging only", "End-to-end tracing across retrieval, tools and generation", "Storage monitoring", "Network monitoring"], answer: 1 },
+                    { id: 30, q: "What is retrieval drift?", options: ["Retrieval quality degrading as content evolves", "Storage growth", "GPU throttling", "DNS issues"], answer: 0 },
+                    { id: 31, q: "What is the biggest weakness of agentic systems at scale?", options: ["Coordination complexity", "Vector databases", "APIs", "Storage"], answer: 0 },
+                    { id: 32, q: "Why are synthetic evaluation datasets risky?", options: ["They may not represent production behaviour", "They cost less", "They are faster", "They improve quality"], answer: 0 },
+                    { id: 33, q: "What architectural pattern best prevents runaway agents?", options: ["Goal constraints and execution boundaries", "Bigger context", "More agents", "More prompts"], answer: 0 },
+                    { id: 34, q: "Why is enterprise AI governance difficult?", options: ["Model behaviour changes probabilistically", "Storage cost", "Networking", "Authentication"], answer: 0 },
+                    { id: 35, q: "Which metric best measures RAG retrieval quality?", options: ["Recall@K", "CPU", "Throughput", "Storage"], answer: 0 }
                 ]
             },
             {
-                section: "Section 2 – LLMs & Prompt Engineering",
+                section: "Expert / Research Level Deep Dive",
+                isExpert: true,
                 questions: [
-                    { id: 11, q: "Which prompt generally produces the best result?", options: ["Explain", "Help", "Act as a healthcare architect and summarize this policy in 5 bullet points", "Tell me things"], answer: 2 },
-                    { id: 12, q: "What is Prompt Engineering?", options: ["Designing effective prompts for AI", "Building databases", "Creating APIs", "Network design"], answer: 0 },
-                    { id: 13, q: "Why use system prompts?", options: ["Define AI behavior", "Increase storage", "Improve bandwidth", "Replace APIs"], answer: 0 },
-                    { id: 14, q: "What is hallucination?", options: ["AI generating incorrect information confidently", "Slow responses", "Authentication failure", "Database corruption"], answer: 0 },
-                    { id: 15, q: "What is temperature in an LLM?", options: ["Server heat", "Randomness of outputs", "CPU usage", "Network latency"], answer: 1 },
-                    { id: 16, q: "Lower temperature usually means:", options: ["More predictable responses", "More hallucinations", "Larger models", "Faster databases"], answer: 0 },
-                    { id: 17, q: "Few-shot prompting means:", options: ["Providing examples in the prompt", "Limiting users", "Blocking responses", "Compressing prompts"], answer: 0 },
-                    { id: 18, q: "What is context window?", options: ["Amount of information model can process at once", "Browser tab", "Security setting", "Search index"], answer: 0 },
-                    { id: 19, q: "Why are embeddings important?", options: ["Represent semantic meaning of content", "Improve networking", "Encrypt data", "Replace APIs"], answer: 0 },
-                    { id: 20, q: "What is fine-tuning?", options: ["Training a model further on domain data", "Restarting a model", "Indexing documents", "Running prompts"], answer: 0 }
-                ]
-            },
-            {
-                section: "Section 3 – RAG",
-                questions: [
-                    { id: 21, q: "RAG stands for:", options: ["Retrieval Augmented Generation", "Rapid AI Gateway", "Resource Access Group", "Response Automation Grid"], answer: 0 },
-                    { id: 22, q: "What problem does RAG solve?", options: ["Hallucinations", "DNS issues", "Storage limits", "Firewalls"], answer: 0 },
-                    { id: 23, q: "Which component stores embeddings?", options: ["Key Vault", "Vector Database", "APIM", "DNS"], answer: 1 },
-                    { id: 24, q: "What is chunking?", options: ["Splitting content into smaller retrieval units", "Compression", "Encryption", "Backup"], answer: 0 },
-                    { id: 25, q: "What is vector search?", options: ["Similarity-based retrieval", "SQL query", "Network routing", "Logging"], answer: 0 },
-                    { id: 26, q: "Which Azure service is commonly used for RAG?", options: ["Azure AI Search", "Azure DNS", "Azure Bastion", "Azure Firewall"], answer: 0 },
-                    { id: 27, q: "Hybrid search combines:", options: ["Vector and keyword search", "SQL and NoSQL", "VM and Containers", "Public and private cloud"], answer: 0 },
-                    { id: 28, q: "What is grounding?", options: ["Providing factual context to the model", "Shutting down services", "Encrypting prompts", "Deploying models"], answer: 0 },
-                    { id: 29, q: "Which architecture pattern best supports enterprise knowledge assistants?", options: ["RAG", "FTP", "Mainframe", "ETL Only"], answer: 0 },
-                    { id: 30, q: "What should be evaluated in a RAG solution?", options: ["Retrieval quality", "Answer relevance", "Grounding accuracy", "All of the above"], answer: 3 }
-                ]
-            },
-            {
-                section: "Section 4 – Azure AI & Microsoft AI",
-                questions: [
-                    { id: 31, q: "Which service provides GPT models in Azure?", options: ["Azure OpenAI", "Azure VM", "Azure SQL", "Azure DNS"], answer: 0 },
-                    { id: 32, q: "Azure AI Foundry is primarily used for:", options: ["Building and managing AI solutions", "Hosting databases", "DNS management", "Firewall rules"], answer: 0 },
-                    { id: 33, q: "Which service supports speech-to-text?", options: ["Azure Speech", "APIM", "Bastion", "Sentinel"], answer: 0 },
-                    { id: 34, q: "Which service supports document intelligence?", options: ["Azure AI Document Intelligence", "Azure SQL", "Defender", "DNS"], answer: 0 },
-                    { id: 35, q: "Microsoft Copilot Studio is used for:", options: ["Building AI agents", "Managing VMs", "Networking", "Backups"], answer: 0 },
-                    { id: 36, q: "What secures access to Azure AI services?", options: ["Entra ID", "FTP", "DNS", "SMTP"], answer: 0 },
-                    { id: 37, q: "Which service can expose enterprise APIs securely?", options: ["APIM", "Blob Storage", "VM Scale Set", "DNS"], answer: 0 },
-                    { id: 38, q: "Which service stores secrets?", options: ["Key Vault", "DNS", "VM", "Firewall"], answer: 0 },
-                    { id: 39, q: "Which service provides centralized monitoring?", options: ["Azure Monitor", "DNS", "SQL", "Storage"], answer: 0 },
-                    { id: 40, q: "Which Microsoft platform supports analytics and lakehouse workloads?", options: ["Microsoft Fabric", "Outlook", "Teams", "Word"], answer: 0 }
-                ]
-            },
-            {
-                section: "Section 5 – Agents & Agentic AI",
-                questions: [
-                    { id: 41, q: "What differentiates an agent from a chatbot?", options: ["Agents can take actions using tools", "Agents use databases", "Agents require VMs", "Agents replace APIs"], answer: 0 },
-                    { id: 42, q: "What is tool calling?", options: ["Allowing AI to invoke external systems", "Monitoring servers", "Network routing", "Database indexing"], answer: 0 },
-                    { id: 43, q: "What is an agent orchestrator?", options: ["Coordinates agent workflows", "Stores files", "Manages DNS", "Creates backups"], answer: 0 },
-                    { id: 44, q: "Why use multi-agent systems?", options: ["Specialization of responsibilities", "Higher latency", "More storage", "Reduced governance"], answer: 0 },
-                    { id: 45, q: "What is MCP?", options: ["Model Context Protocol", "Main Cloud Platform", "Managed Compute Process", "Multi Cloud Policy"], answer: 0 },
-                    { id: 46, q: "What is an agent memory?", options: ["Stored context and knowledge", "Network cache", "SQL index", "Storage account"], answer: 0 },
-                    { id: 47, q: "Which pattern is best for enterprise agent integration?", options: ["APIM + Entra ID", "Anonymous access", "Shared admin account", "Public database access"], answer: 0 },
-                    { id: 48, q: "What is human-in-the-loop?", options: ["Human approval for important decisions", "Manual coding", "Database administration", "Firewall management"], answer: 0 },
-                    { id: 49, q: "What is autonomous planning?", options: ["Agent breaking tasks into steps", "Network routing", "Storage optimization", "VM scaling"], answer: 0 },
-                    { id: 50, q: "Which capability is critical for enterprise agents?", options: ["Auditability", "Random behavior", "Anonymous access", "Unrestricted actions"], answer: 0 }
-                ]
-            },
-            {
-                section: "Section 6 – Security, Governance & Enterprise Architecture",
-                questions: [
-                    { id: 51, q: "Responsible AI focuses on:", options: ["Fairness, transparency and accountability", "Cost reduction only", "Faster coding", "Networking"], answer: 0 },
-                    { id: 52, q: "What is the biggest AI security risk?", options: ["Unauthorized data access", "DNS records", "VM size", "Storage tier"], answer: 0 },
-                    { id: 53, q: "What should protect sensitive AI endpoints?", options: ["APIM and WAF", "FTP", "Public access", "Shared passwords"], answer: 0 },
-                    { id: 54, q: "Why log AI interactions?", options: ["Audit and compliance", "Increase storage costs", "Reduce security", "Disable monitoring"], answer: 0 },
-                    { id: 55, q: "What is AI observability?", options: ["Monitoring AI behaviour and performance", "Network routing", "Database indexing", "Authentication"], answer: 0 },
-                    { id: 56, q: "Which architecture best supports enterprise AI adoption?", options: ["Centralized governed AI platform", "Independent shadow AI tools", "Local spreadsheets", "Email workflows"], answer: 0 },
-                    { id: 57, q: "What should architects evaluate before deploying AI?", options: ["Risk", "Security", "Compliance", "All of the above"], answer: 3 },
-                    { id: 58, q: "Which Australian principle is most aligned with AI governance?", options: ["Responsible AI", "Open FTP", "Anonymous access", "Public credentials"], answer: 0 },
-                    { id: 59, q: "Which architecture component commonly provides AI guardrails?", options: ["Azure AI Content Safety", "DNS", "SMTP", "VM Scale Set"], answer: 0 },
-                    { id: 60, q: "What is the role of an Enterprise AI Architect?", options: ["Define standards, governance, reference architectures and strategy", "Manage printers", "Administer laptops", "Maintain DNS records"], answer: 0 }
+                    { id: 36, q: "What fundamental limitation described in the Transformer architecture becomes problematic as context windows approach millions of tokens?", options: ["Attention scaling complexity", "Embedding storage", "DNS propagation", "Vector indexing"], answer: 0 },
+                    { id: 37, q: "Why do Mixture-of-Experts architectures often outperform dense models at similar serving costs?", options: ["Sparse activation of expert subnetworks", "Larger embeddings", "Better storage", "More prompts"], answer: 0 },
+                    { id: 38, q: "What is the primary reason chain-of-thought prompting improves reasoning performance?", options: ["Encourages intermediate latent reasoning steps", "Increases context size", "Improves embeddings", "Improves networking"], answer: 0 },
+                    { id: 39, q: "Which problem remains largely unsolved in autonomous agents?", options: ["Reliable long-horizon planning", "Authentication", "Storage", "DNS"], answer: 0 },
+                    { id: 40, q: "What is currently considered one of the hardest open problems in LLM alignment?", options: ["Ensuring models pursue intended goals under novel conditions", "Vector indexing", "Search latency", "API versioning"], answer: 0 }
                 ]
             }
         ];
 
-        const evaluationProfiles = {
-            beginner: {
-                title: "Beginner",
-                desc: "Basic awareness of AI concepts. Limited understanding of enterprise AI architecture. Needs foundational training.",
-                learning: ["AI-900", "Generative AI for Everyone", "Microsoft Learn AI Fundamentals", "Prompt Engineering Basics"]
-            },
-            intermediate: {
-                title: "Intermediate",
-                desc: "Understands AI concepts and can participate in AI projects. Familiar with RAG, Azure AI and agent concepts. Requires deeper architecture experience.",
-                learning: ["AI-102", "Azure AI Foundry", "Azure AI Search", "Copilot Studio", "RAG Design Patterns", "AI Governance"]
-            },
-            advanced: {
-                title: "Advanced",
-                desc: "Can design and lead enterprise AI solutions. Understands RAG, agents, security, governance and Azure AI architecture. Ready to lead AI initiatives and mentor others.",
-                learning: ["Multi-Agent Architectures", "Claude Agent Design", "AI Platform Architecture", "AI Governance Leadership", "Enterprise AI CoE Design", "Advanced Evaluation & Observability"]
-            }
-        };
+        // Scoring Matrix Profile Configuration
+        const scoreBrackets = [
+            { min: 38, max: 40, title: "Enterprise AI Architect", desc: "Demonstrates deep mathematical and architectural understanding of enterprise AI patterns, agentic networks, end-to-end evaluation, probabilistic governance, and core model internals." },
+            { min: 33, max: 37, title: "AI Solution Architect", desc: "Highly capable of leading complex AI implementation pipelines, grounding workflows, and foundational risk mediation strategies across enterprise ecosystems." },
+            { min: 26, max: 32, title: "Advanced Architect", desc: "Possesses solid conceptual visibility. Capable of drafting and deploying production-grade enterprise AI applications given standardized structural guidance." },
+            { min: 16, max: 25, title: "Intermediate Practitioner", desc: "Comfortably understands terminology and standard tooling. Ready to participate actively inside hybrid AI delivery streams and custom tool integrations." },
+            { min: 0, max: 15, title: "Beginner Awareness", desc: "Familiar with surface level terminology and cloud patterns, but lacks the deeper systems engineering background required to safely lead enterprise AI architecture." }
+        ];
 
         const container = document.getElementById('questionsContainer');
         const form = document.getElementById('assessmentForm');
         let correctAnswersMap = {};
 
-        // Render Form dynamically
+        // Generate Form Document Object Model
         assessmentData.forEach((sec) => {
             const sectionDiv = document.createElement('div');
             sectionDiv.className = 'bg-white rounded-lg shadow-md mb-8 overflow-hidden border border-gray-200';
             
             const secHeader = document.createElement('div');
-            secHeader.className = 'px-6 py-4 section-header flex items-center justify-between';
-            secHeader.innerHTML = `<h3 class="text-xl font-bold tracking-wide">${sec.section}</h3>`;
+            secHeader.className = `px-6 py-4 flex items-center justify-between ${sec.isExpert ? 'expert-header' : 'section-header'}`;
+            secHeader.innerHTML = `
+                <h3 class="text-xl font-bold tracking-wide">${sec.section}</h3>
+                ${sec.isExpert ? '<span class="bg-white text-uniting-red text-xs uppercase font-extrabold px-3 py-1 rounded shadow-sm">Advanced Track</span>' : ''}
+            `;
             sectionDiv.appendChild(secHeader);
 
             const qList = document.createElement('div');
@@ -248,7 +218,7 @@
 
                 qDiv.innerHTML = `
                     <div class="flex items-start">
-                        <span class="flex-shrink-0 bg-uniting-red text-white text-sm font-extrabold rounded w-8 h-8 flex items-center justify-center mr-4 mt-1 shadow-sm">
+                        <span class="flex-shrink-0 ${sec.isExpert ? 'bg-uniting-navy' : 'bg-uniting-red'} text-white text-sm font-extrabold rounded w-8 h-8 flex items-center justify-center mr-4 mt-1 shadow-sm">
                             ${q.id}
                         </span>
                         <div class="w-full">
@@ -266,7 +236,7 @@
             container.appendChild(sectionDiv);
         });
 
-        // Form Submission Logic
+        // Grading Operations
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -290,24 +260,12 @@
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            document.getElementById('scoreDisplay').innerText = `${score} / 60`;
+            document.getElementById('scoreDisplay').innerText = `${score} / 40`;
 
-            let profileKey = 'beginner';
-            if (score >= 25 && score <= 44) profileKey = 'intermediate';
-            if (score >= 45) profileKey = 'advanced';
+            const matchedProfile = scoreBrackets.find(bracket => score >= bracket.min && score <= bracket.max);
 
-            const profile = evaluationProfiles[profileKey];
-
-            document.getElementById('profileBadge').innerText = profile.title;
-            document.getElementById('profileDescription').innerText = profile.desc;
-            
-            const learningList = document.getElementById('recommendedLearning');
-            learningList.innerHTML = '';
-            profile.learning.forEach(item => {
-                const li = document.createElement('li');
-                li.innerText = item;
-                learningList.appendChild(li);
-            });
+            document.getElementById('profileBadge').innerText = matchedProfile.title;
+            document.getElementById('profileDescription').innerText = matchedProfile.desc;
         }
     </script>
 </body>
