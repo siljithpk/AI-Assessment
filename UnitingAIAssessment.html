@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uniting AI Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        uniting: {
+                            red: '#D50032',
+                            navy: '#002B49',
+                            light: '#F4F5F7',
+                            gray: '#E5E7EB'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .radio-custom:checked + label {
+            background-color: #002B49;
+            color: white;
+            border-color: #002B49;
+        }
+        .section-header {
+            background-color: #002B49;
+            color: white;
+            border-bottom: 4px solid #D50032;
+        }
+    </style>
+</head>
+<body class="bg-uniting-light text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-uniting-red">
+        <div class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center">
+                <h1 class="text-4xl font-extrabold tracking-tight text-uniting-navy">Uniting</h1>
+            </div>
+            <div class="text-right border-l-2 border-gray-200 pl-4">
+                <h2 class="text-xl font-bold text-uniting-navy">AI Assessment</h2>
+                <p class="text-sm font-semibold text-uniting-red">60 Questions</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-8">
+        
+        <div id="intro" class="bg-white rounded-lg shadow-sm p-8 mb-8 border-l-8 border-uniting-red">
+            <h2 class="text-2xl font-bold text-uniting-navy mb-4">Welcome to the Uniting AI Assessment</h2>
+            <p class="text-gray-600 mb-4">This 60-question assessment is designed to establish your baseline understanding of Artificial Intelligence, LLMs, RAG architectures, Azure AI, and AI Governance.</p>
+            <p class="text-gray-600">Select the best answer for each question. Once completed, your profile and recommended learning paths will be generated.</p>
+        </div>
+
+        <form id="assessmentForm" class="space-y-12">
+            <div id="questionsContainer"></div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between sticky bottom-4 border-2 border-uniting-navy">
+                <div class="text-sm text-uniting-navy font-semibold mb-4 sm:mb-0">Ensure all 60 questions are answered before submitting.</div>
+                <button type="submit" class="bg-uniting-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 shadow-md transform hover:-translate-y-1">
+                    Submit Assessment
+                </button>
+            </div>
+        </form>
+
+        <div id="resultsSection" class="hidden bg-white rounded-lg shadow-lg p-8 mt-8 border-t-8 border-uniting-navy mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-uniting-navy mb-2">Assessment Complete</h2>
+                <div class="text-6xl font-extrabold text-uniting-red mb-6" id="scoreDisplay">0 / 60</div>
+                <div class="inline-block px-6 py-3 rounded-full text-xl font-bold text-white bg-uniting-navy shadow-md" id="profileBadge">Profile</div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-uniting-light p-6 rounded-lg border-l-4 border-uniting-navy shadow-sm">
+                    <h3 class="text-xl font-bold text-uniting-navy mb-3 pb-2 border-b border-gray-300">Profile Description</h3>
+                    <p id="profileDescription" class="text-gray-700 leading-relaxed font-medium"></p>
+                </div>
+                <div class="bg-uniting-light p-6 rounded-lg border-l-4 border-uniting-red shadow-sm">
+                    <h3 class="text-xl font-bold text-uniting-navy mb-3 pb-2 border-b border-gray-300">Recommended Learning</h3>
+                    <ul id="recommendedLearning" class="list-disc pl-5 text-gray-700 space-y-2 font-medium"></ul>
+                </div>
+            </div>
+            
+            <div class="mt-10 text-center">
+                <button type="button" onclick="location.reload()" class="text-uniting-navy hover:text-uniting-red font-bold transition duration-200 border-b-2 border-transparent hover:border-uniting-red pb-1">
+                    ← Retake Assessment
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Full Assessment Data
+        const assessmentData = [
+            {
+                section: "Section 1 – AI Fundamentals",
+                questions: [
+                    { id: 1, q: "What is Artificial Intelligence (AI)?", options: ["A programming language", "Systems that perform tasks requiring human intelligence", "A database technology", "A networking protocol"], answer: 1 },
+                    { id: 2, q: "Which is an example of Generative AI?", options: ["Firewall", "GPT generating text", "DNS server", "Data warehouse"], answer: 1 },
+                    { id: 3, q: "What is Machine Learning?", options: ["A subset of AI that learns from data", "A cloud service", "A database engine", "A networking model"], answer: 0 },
+                    { id: 4, q: "What is Deep Learning?", options: ["Spreadsheet automation", "Rule-based programming", "Neural-network-based machine learning", "API security"], answer: 2 },
+                    { id: 5, q: "Which statement best describes an LLM?", options: ["Large Language Model", "Local Logic Module", "Linked Learning Mechanism", "Language Lookup Method"], answer: 0 },
+                    { id: 6, q: "LLMs primarily predict:", options: ["Database records", "Network packets", "Next tokens in a sequence", "User passwords"], answer: 2 },
+                    { id: 7, q: "What is a token?", options: ["API key", "Unit of text processed by an LLM", "User account", "Security certificate"], answer: 1 },
+                    { id: 8, q: "What is training data?", options: ["Data used to teach a model patterns", "Backup data", "Audit logs", "Metadata"], answer: 0 },
+                    { id: 9, q: "What is inference?", options: ["Model generating responses", "Model training", "Data backup", "Authentication"], answer: 0 },
+                    { id: 10, q: "Which is NOT an AI use case?", options: ["Image generation", "Text summarization", "Predictive analytics", "Replacing electricity"], answer: 3 }
+                ]
+            },
+            {
+                section: "Section 2 – LLMs & Prompt Engineering",
+                questions: [
+                    { id: 11, q: "Which prompt generally produces the best result?", options: ["Explain", "Help", "Act as a healthcare architect and summarize this policy in 5 bullet points", "Tell me things"], answer: 2 },
+                    { id: 12, q: "What is Prompt Engineering?", options: ["Designing effective prompts for AI", "Building databases", "Creating APIs", "Network design"], answer: 0 },
+                    { id: 13, q: "Why use system prompts?", options: ["Define AI behavior", "Increase storage", "Improve bandwidth", "Replace APIs"], answer: 0 },
+                    { id: 14, q: "What is hallucination?", options: ["AI generating incorrect information confidently", "Slow responses", "Authentication failure", "Database corruption"], answer: 0 },
+                    { id: 15, q: "What is temperature in an LLM?", options: ["Server heat", "Randomness of outputs", "CPU usage", "Network latency"], answer: 1 },
+                    { id: 16, q: "Lower temperature usually means:", options: ["More predictable responses", "More hallucinations", "Larger models", "Faster databases"], answer: 0 },
+                    { id: 17, q: "Few-shot prompting means:", options: ["Providing examples in the prompt", "Limiting users", "Blocking responses", "Compressing prompts"], answer: 0 },
+                    { id: 18, q: "What is context window?", options: ["Amount of information model can process at once", "Browser tab", "Security setting", "Search index"], answer: 0 },
+                    { id: 19, q: "Why are embeddings important?", options: ["Represent semantic meaning of content", "Improve networking", "Encrypt data", "Replace APIs"], answer: 0 },
+                    { id: 20, q: "What is fine-tuning?", options: ["Training a model further on domain data", "Restarting a model", "Indexing documents", "Running prompts"], answer: 0 }
+                ]
+            },
+            {
+                section: "Section 3 – RAG",
+                questions: [
+                    { id: 21, q: "RAG stands for:", options: ["Retrieval Augmented Generation", "Rapid AI Gateway", "Resource Access Group", "Response Automation Grid"], answer: 0 },
+                    { id: 22, q: "What problem does RAG solve?", options: ["Hallucinations", "DNS issues", "Storage limits", "Firewalls"], answer: 0 },
+                    { id: 23, q: "Which component stores embeddings?", options: ["Key Vault", "Vector Database", "APIM", "DNS"], answer: 1 },
+                    { id: 24, q: "What is chunking?", options: ["Splitting content into smaller retrieval units", "Compression", "Encryption", "Backup"], answer: 0 },
+                    { id: 25, q: "What is vector search?", options: ["Similarity-based retrieval", "SQL query", "Network routing", "Logging"], answer: 0 },
+                    { id: 26, q: "Which Azure service is commonly used for RAG?", options: ["Azure AI Search", "Azure DNS", "Azure Bastion", "Azure Firewall"], answer: 0 },
+                    { id: 27, q: "Hybrid search combines:", options: ["Vector and keyword search", "SQL and NoSQL", "VM and Containers", "Public and private cloud"], answer: 0 },
+                    { id: 28, q: "What is grounding?", options: ["Providing factual context to the model", "Shutting down services", "Encrypting prompts", "Deploying models"], answer: 0 },
+                    { id: 29, q: "Which architecture pattern best supports enterprise knowledge assistants?", options: ["RAG", "FTP", "Mainframe", "ETL Only"], answer: 0 },
+                    { id: 30, q: "What should be evaluated in a RAG solution?", options: ["Retrieval quality", "Answer relevance", "Grounding accuracy", "All of the above"], answer: 3 }
+                ]
+            },
+            {
+                section: "Section 4 – Azure AI & Microsoft AI",
+                questions: [
+                    { id: 31, q: "Which service provides GPT models in Azure?", options: ["Azure OpenAI", "Azure VM", "Azure SQL", "Azure DNS"], answer: 0 },
+                    { id: 32, q: "Azure AI Foundry is primarily used for:", options: ["Building and managing AI solutions", "Hosting databases", "DNS management", "Firewall rules"], answer: 0 },
+                    { id: 33, q: "Which service supports speech-to-text?", options: ["Azure Speech", "APIM", "Bastion", "Sentinel"], answer: 0 },
+                    { id: 34, q: "Which service supports document intelligence?", options: ["Azure AI Document Intelligence", "Azure SQL", "Defender", "DNS"], answer: 0 },
+                    { id: 35, q: "Microsoft Copilot Studio is used for:", options: ["Building AI agents", "Managing VMs", "Networking", "Backups"], answer: 0 },
+                    { id: 36, q: "What secures access to Azure AI services?", options: ["Entra ID", "FTP", "DNS", "SMTP"], answer: 0 },
+                    { id: 37, q: "Which service can expose enterprise APIs securely?", options: ["APIM", "Blob Storage", "VM Scale Set", "DNS"], answer: 0 },
+                    { id: 38, q: "Which service stores secrets?", options: ["Key Vault", "DNS", "VM", "Firewall"], answer: 0 },
+                    { id: 39, q: "Which service provides centralized monitoring?", options: ["Azure Monitor", "DNS", "SQL", "Storage"], answer: 0 },
+                    { id: 40, q: "Which Microsoft platform supports analytics and lakehouse workloads?", options: ["Microsoft Fabric", "Outlook", "Teams", "Word"], answer: 0 }
+                ]
+            },
+            {
+                section: "Section 5 – Agents & Agentic AI",
+                questions: [
+                    { id: 41, q: "What differentiates an agent from a chatbot?", options: ["Agents can take actions using tools", "Agents use databases", "Agents require VMs", "Agents replace APIs"], answer: 0 },
+                    { id: 42, q: "What is tool calling?", options: ["Allowing AI to invoke external systems", "Monitoring servers", "Network routing", "Database indexing"], answer: 0 },
+                    { id: 43, q: "What is an agent orchestrator?", options: ["Coordinates agent workflows", "Stores files", "Manages DNS", "Creates backups"], answer: 0 },
+                    { id: 44, q: "Why use multi-agent systems?", options: ["Specialization of responsibilities", "Higher latency", "More storage", "Reduced governance"], answer: 0 },
+                    { id: 45, q: "What is MCP?", options: ["Model Context Protocol", "Main Cloud Platform", "Managed Compute Process", "Multi Cloud Policy"], answer: 0 },
+                    { id: 46, q: "What is an agent memory?", options: ["Stored context and knowledge", "Network cache", "SQL index", "Storage account"], answer: 0 },
+                    { id: 47, q: "Which pattern is best for enterprise agent integration?", options: ["APIM + Entra ID", "Anonymous access", "Shared admin account", "Public database access"], answer: 0 },
+                    { id: 48, q: "What is human-in-the-loop?", options: ["Human approval for important decisions", "Manual coding", "Database administration", "Firewall management"], answer: 0 },
+                    { id: 49, q: "What is autonomous planning?", options: ["Agent breaking tasks into steps", "Network routing", "Storage optimization", "VM scaling"], answer: 0 },
+                    { id: 50, q: "Which capability is critical for enterprise agents?", options: ["Auditability", "Random behavior", "Anonymous access", "Unrestricted actions"], answer: 0 }
+                ]
+            },
+            {
+                section: "Section 6 – Security, Governance & Enterprise Architecture",
+                questions: [
+                    { id: 51, q: "Responsible AI focuses on:", options: ["Fairness, transparency and accountability", "Cost reduction only", "Faster coding", "Networking"], answer: 0 },
+                    { id: 52, q: "What is the biggest AI security risk?", options: ["Unauthorized data access", "DNS records", "VM size", "Storage tier"], answer: 0 },
+                    { id: 53, q: "What should protect sensitive AI endpoints?", options: ["APIM and WAF", "FTP", "Public access", "Shared passwords"], answer: 0 },
+                    { id: 54, q: "Why log AI interactions?", options: ["Audit and compliance", "Increase storage costs", "Reduce security", "Disable monitoring"], answer: 0 },
+                    { id: 55, q: "What is AI observability?", options: ["Monitoring AI behaviour and performance", "Network routing", "Database indexing", "Authentication"], answer: 0 },
+                    { id: 56, q: "Which architecture best supports enterprise AI adoption?", options: ["Centralized governed AI platform", "Independent shadow AI tools", "Local spreadsheets", "Email workflows"], answer: 0 },
+                    { id: 57, q: "What should architects evaluate before deploying AI?", options: ["Risk", "Security", "Compliance", "All of the above"], answer: 3 },
+                    { id: 58, q: "Which Australian principle is most aligned with AI governance?", options: ["Responsible AI", "Open FTP", "Anonymous access", "Public credentials"], answer: 0 },
+                    { id: 59, q: "Which architecture component commonly provides AI guardrails?", options: ["Azure AI Content Safety", "DNS", "SMTP", "VM Scale Set"], answer: 0 },
+                    { id: 60, q: "What is the role of an Enterprise AI Architect?", options: ["Define standards, governance, reference architectures and strategy", "Manage printers", "Administer laptops", "Maintain DNS records"], answer: 0 }
+                ]
+            }
+        ];
+
+        const evaluationProfiles = {
+            beginner: {
+                title: "Beginner",
+                desc: "Basic awareness of AI concepts. Limited understanding of enterprise AI architecture. Needs foundational training.",
+                learning: ["AI-900", "Generative AI for Everyone", "Microsoft Learn AI Fundamentals", "Prompt Engineering Basics"]
+            },
+            intermediate: {
+                title: "Intermediate",
+                desc: "Understands AI concepts and can participate in AI projects. Familiar with RAG, Azure AI and agent concepts. Requires deeper architecture experience.",
+                learning: ["AI-102", "Azure AI Foundry", "Azure AI Search", "Copilot Studio", "RAG Design Patterns", "AI Governance"]
+            },
+            advanced: {
+                title: "Advanced",
+                desc: "Can design and lead enterprise AI solutions. Understands RAG, agents, security, governance and Azure AI architecture. Ready to lead AI initiatives and mentor others.",
+                learning: ["Multi-Agent Architectures", "Claude Agent Design", "AI Platform Architecture", "AI Governance Leadership", "Enterprise AI CoE Design", "Advanced Evaluation & Observability"]
+            }
+        };
+
+        const container = document.getElementById('questionsContainer');
+        const form = document.getElementById('assessmentForm');
+        let correctAnswersMap = {};
+
+        // Render Form dynamically
+        assessmentData.forEach((sec) => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'bg-white rounded-lg shadow-md mb-8 overflow-hidden border border-gray-200';
+            
+            const secHeader = document.createElement('div');
+            secHeader.className = 'px-6 py-4 section-header flex items-center justify-between';
+            secHeader.innerHTML = `<h3 class="text-xl font-bold tracking-wide">${sec.section}</h3>`;
+            sectionDiv.appendChild(secHeader);
+
+            const qList = document.createElement('div');
+            qList.className = 'p-6 space-y-8';
+
+            sec.questions.forEach((q) => {
+                correctAnswersMap[`q${q.id}`] = q.answer;
+
+                const qDiv = document.createElement('div');
+                qDiv.className = 'pb-6 border-b border-gray-100 last:border-0 last:pb-0';
+                
+                let optionsHtml = '';
+                const letters = ['A', 'B', 'C', 'D'];
+                
+                q.options.forEach((opt, optIndex) => {
+                    optionsHtml += `
+                        <div class="relative flex items-start mt-3 group">
+                            <input type="radio" required id="q${q.id}_opt${optIndex}" name="q${q.id}" value="${optIndex}" class="peer sr-only radio-custom">
+                            <label for="q${q.id}_opt${optIndex}" class="flex p-4 w-full bg-uniting-light border border-gray-300 rounded-lg cursor-pointer group-hover:bg-gray-100 peer-checked:bg-uniting-navy peer-checked:text-white peer-checked:border-uniting-navy transition-all duration-200 shadow-sm">
+                                <span class="font-bold mr-3">${letters[optIndex]}.</span>
+                                <span>${opt}</span>
+                            </label>
+                        </div>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start">
+                        <span class="flex-shrink-0 bg-uniting-red text-white text-sm font-extrabold rounded w-8 h-8 flex items-center justify-center mr-4 mt-1 shadow-sm">
+                            ${q.id}
+                        </span>
+                        <div class="w-full">
+                            <h4 class="text-lg font-bold text-uniting-navy">${q.q}</h4>
+                            <div class="mt-3 space-y-2">
+                                ${optionsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                qList.appendChild(qDiv);
+            });
+
+            sectionDiv.appendChild(qList);
+            container.appendChild(sectionDiv);
+        });
+
+        // Form Submission Logic
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            let score = 0;
+
+            for (let [name, value] of formData.entries()) {
+                if (parseInt(value) === correctAnswersMap[name]) {
+                    score++;
+                }
+            }
+
+            displayResults(score);
+        });
+
+        function displayResults(score) {
+            form.style.display = 'none';
+            document.getElementById('intro').style.display = 'none';
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.getElementById('scoreDisplay').innerText = `${score} / 60`;
+
+            let profileKey = 'beginner';
+            if (score >= 25 && score <= 44) profileKey = 'intermediate';
+            if (score >= 45) profileKey = 'advanced';
+
+            const profile = evaluationProfiles[profileKey];
+
+            document.getElementById('profileBadge').innerText = profile.title;
+            document.getElementById('profileDescription').innerText = profile.desc;
+            
+            const learningList = document.getElementById('recommendedLearning');
+            learningList.innerHTML = '';
+            profile.learning.forEach(item => {
+                const li = document.createElement('li');
+                li.innerText = item;
+                learningList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
